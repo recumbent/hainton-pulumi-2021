@@ -1,0 +1,68 @@
+# Test calls to function
+
+@devUrl = https://functionapp3c31729b.azurewebsites.net/api/lookup
+
+@prodUrl = https://example.com
+
+@awsUrl = https://example.com
+# Quote Server
+
+GET https://0rogaeco5b.execute-api.eu-west-2.amazonaws.com/Prod/quote/dna/5
+
+###
+
+# @name Azure-Dev-1
+
+POST {{devUrl}}
+
+{
+    "ClientId" : 1,
+    "QuoteId" : 2
+}
+
+###
+
+# @name Azure-Dev-2
+
+POST {{devUrl}}
+
+{
+    "ClientId" : 2,
+    "QuoteId" : 3
+}
+
+####
+
+# @name Azure-Prod-1
+
+POST {{prodUrl}}
+
+{
+    "ClientId" : 123,
+    "QuoteId" : 25
+}
+
+###
+
+# @name Azure-Prod-2
+
+POST {{prodUrl}}
+
+{
+    "ClientId" : 123,
+    "QuoteId" : 26
+}
+
+###
+
+
+###
+
+# @name AWS
+
+POST {{awsUrl}}
+
+{
+    "ClientId" : 3,
+    "QuoteId" : 25
+}
