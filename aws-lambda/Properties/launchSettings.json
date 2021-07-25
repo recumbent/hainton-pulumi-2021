@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Mock Lambda Test Tool": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\%USERNAME%\\.dotnet\\tools\\dotnet-lambda-test-tool-3.1.exe",
+      "commandLineArgs": "--port 5050",
+      "workingDirectory": ".\\bin\\$(Configuration)\\netcoreapp3.1",
+      "environmentVariables": {
+        "Key": "Value",
+        "QuoteServerHost": "https://vn651r8t22.execute-api.eu-west-2.amazonaws.com/Prod",
+        "DataBucket": "murph-temp-playing"
+      }
+    }
+  }
+}
