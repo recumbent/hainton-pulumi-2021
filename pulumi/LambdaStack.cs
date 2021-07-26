@@ -45,6 +45,7 @@ class LambdaStack : Stack
         var apiGateway = new Api("PulumiDemoGateway", new ApiArgs()
         {
             ProtocolType = "HTTP",
+            Tags = tags
         });
 
         // Give API Gateway permissions to invoke the Lambda
