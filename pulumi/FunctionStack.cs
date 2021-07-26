@@ -20,7 +20,7 @@ class FunctionStack : Stack
         });
 
         // pd04 Storage account
-        var storageAccount = new StorageAccount("sa", new StorageAccountArgs
+        var storageAccount = new StorageAccount("sa", new StorageAccountArgs()
         {
             ResourceGroupName = resourceGroup.Name,
             Sku = new SkuArgs
@@ -34,9 +34,9 @@ class FunctionStack : Stack
         var appServicePlan = new AppServicePlan("FuntionAppServicePlan", new AppServicePlanArgs()
         {
             ResourceGroupName = resourceGroup.Name,
-
+        
             Kind = "FunctionApp",
-
+        
             // Consumption plan SKU
             Sku = new SkuDescriptionArgs
             {
@@ -55,7 +55,7 @@ class FunctionStack : Stack
         });
         
         // pd08  Data Container
-        var dataContainer = new BlobContainer("data", new BlobContainerArgs
+        var dataContainer = new BlobContainer("data", new BlobContainerArgs()
         {
             ResourceGroupName = resourceGroup.Name,
             AccountName = storageAccount.Name,
@@ -72,11 +72,11 @@ class FunctionStack : Stack
             Type = BlobType.Block,
             Source = new FileArchive("../azure-func/publish")
         });
-
+        
         var codeBlobUrl = SignedBlobReadUrl(codeBlob, codeContainer, storageAccount, resourceGroup);
-                
+        
         // pd07 Application insights
-        var appInsights = new Component("appInsights", new ComponentArgs
+        var appInsights = new Component("appInsights", new ComponentArgs()
         {
             ApplicationType = ApplicationType.Web,
             Kind = "web",
@@ -96,10 +96,10 @@ class FunctionStack : Stack
                     // Azure settings
                     new NameValuePairArgs() 
                     {
-                        Name = "AzureWebJobsStorage", 
-                        Value =  GetConnectionString(resourceGroup.Name, storageAccount.Name) 
+                        Name = "AzureWebJobsStorage",
+                        Value =  GetConnectionString(resourceGroup.Name, storageAccount.Name)
                     },
-                    new NameValuePairArgs() 
+                    new NameValuePairArgs()
                     {
                         Name = "runtime",
                         Value = "dotnet"
@@ -119,7 +119,7 @@ class FunctionStack : Stack
                         Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
                         Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
                     },
-                    
+                    // pd02
                     // App settings
                     new NameValuePairArgs()
                     { 
@@ -138,7 +138,7 @@ class FunctionStack : Stack
                 }
             }
         });
-
+        
         // Set outputs
         ResourceGroupName = resourceGroup.Name;
         Endpoint = Output.Create("You forgot to fix me"); // Output.Format($"https://{app.DefaultHostName}/api/lookup");
