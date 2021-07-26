@@ -20,124 +20,18 @@ class FunctionStack : Stack
         });
 
         // pd04 Storage account
-        var storageAccount = new StorageAccount("sa", new StorageAccountArgs()
-        {
-            ResourceGroupName = resourceGroup.Name,
-            Sku = new SkuArgs
-            {
-                Name = SkuName.Standard_LRS,
-            },
-            Kind = Pulumi.AzureNative.Storage.Kind.StorageV2
-        });
         
         // pd03 App Service Plan
-        var appServicePlan = new AppServicePlan("FuntionAppServicePlan", new AppServicePlanArgs()
-        {
-            ResourceGroupName = resourceGroup.Name,
-        
-            Kind = "FunctionApp",
-        
-            // Consumption plan SKU
-            Sku = new SkuDescriptionArgs
-            {
-                Tier = "Dynamic",
-                Name = "Y1"
-            }
-        });
         
         // pd05 Code Container
-        var codeContainer = new BlobContainer("code-container", new BlobContainerArgs()
-        {
-            ResourceGroupName = resourceGroup.Name,
-            AccountName = storageAccount.Name,
-            PublicAccess = PublicAccess.None,
-            ContainerName = "code"
-        });
         
         // pd08  Data Container
-        var dataContainer = new BlobContainer("data", new BlobContainerArgs()
-        {
-            ResourceGroupName = resourceGroup.Name,
-            AccountName = storageAccount.Name,
-            PublicAccess = PublicAccess.None,
-            ContainerName = "data"
-        });
         
         // pd06 Code blob
-        var codeBlob = new Blob("functionCode", new BlobArgs()
-        {
-            AccountName = storageAccount.Name,
-            ContainerName = codeContainer.Name,
-            ResourceGroupName = resourceGroup.Name,
-            Type = BlobType.Block,
-            Source = new FileArchive("../azure-func/publish")
-        });
-        
-        var codeBlobUrl = SignedBlobReadUrl(codeBlob, codeContainer, storageAccount, resourceGroup);
         
         // pd07 Application insights
-        var appInsights = new Component("appInsights", new ComponentArgs()
-        {
-            ApplicationType = ApplicationType.Web,
-            Kind = "web",
-            ResourceGroupName = resourceGroup.Name,
-        });
         
         // pd01 Function App
-        var app = new WebApp("FunctionApp", new WebAppArgs()
-        {
-            Kind = "FunctionApp",
-            ResourceGroupName = resourceGroup.Name,
-            ServerFarmId = appServicePlan.Id,
-            SiteConfig = new SiteConfigArgs()
-            {
-                AppSettings = new[]
-                {
-                    // Azure settings
-                    new NameValuePairArgs() 
-                    {
-                        Name = "AzureWebJobsStorage",
-                        Value =  GetConnectionString(resourceGroup.Name, storageAccount.Name)
-                    },
-                    new NameValuePairArgs()
-                    {
-                        Name = "runtime",
-                        Value = "dotnet"
-                    },
-                    new NameValuePairArgs() 
-                    {
-                        Name = "FUNCTIONS_EXTENSION_VERSION",
-                        Value = "~3"
-                    },
-                    new NameValuePairArgs() 
-                    { 
-                        Name = "WEBSITE_RUN_FROM_PACKAGE", 
-                        Value = codeBlobUrl 
-                    },
-                    new NameValuePairArgs()
-                    {
-                        Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                        Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
-                    },
-                    // pd02
-                    // App settings
-                    new NameValuePairArgs()
-                    { 
-                        Name = "QuoteServerHost",
-                        Value = "https://0rogaeco5b.execute-api.eu-west-2.amazonaws.com/Prod" },
-                    new NameValuePairArgs()
-                    { 
-                        Name = "DataConnectionString",
-                        Value = GetConnectionString(resourceGroup.Name, storageAccount.Name) 
-                    },
-                    new NameValuePairArgs()
-                    { 
-                        Name = "DataContainer",
-                        Value = dataContainer.Name
-                    }
-                }
-            }
-        });
         
         // Set outputs
         ResourceGroupName = resourceGroup.Name;
