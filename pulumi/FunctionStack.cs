@@ -19,6 +19,7 @@ class FunctionStack : Stack
             ResourceGroupName = $"rg-{stack}"
         });
 
+        // pd04 Storage account
         var storageAccount = new StorageAccount("sa", new StorageAccountArgs
         {
             ResourceGroupName = resourceGroup.Name,
@@ -29,6 +30,7 @@ class FunctionStack : Stack
             Kind = Pulumi.AzureNative.Storage.Kind.StorageV2
         });
         
+        // pd03 App Service Plan
         var appServicePlan = new AppServicePlan("FuntionAppServicePlan", new AppServicePlanArgs()
         {
             ResourceGroupName = resourceGroup.Name,
@@ -43,6 +45,7 @@ class FunctionStack : Stack
             }
         });
         
+        // pd05 Code Container
         var codeContainer = new BlobContainer("code-container", new BlobContainerArgs()
         {
             ResourceGroupName = resourceGroup.Name,
@@ -51,6 +54,7 @@ class FunctionStack : Stack
             ContainerName = "code"
         });
         
+        // pd08  Data Container
         var dataContainer = new BlobContainer("data", new BlobContainerArgs
         {
             ResourceGroupName = resourceGroup.Name,
@@ -59,6 +63,7 @@ class FunctionStack : Stack
             ContainerName = "data"
         });
         
+        // pd06 Code blob
         var codeBlob = new Blob("functionCode", new BlobArgs()
         {
             AccountName = storageAccount.Name,
@@ -70,7 +75,7 @@ class FunctionStack : Stack
 
         var codeBlobUrl = SignedBlobReadUrl(codeBlob, codeContainer, storageAccount, resourceGroup);
                 
-        // Application insights
+        // pd07 Application insights
         var appInsights = new Component("appInsights", new ComponentArgs
         {
             ApplicationType = ApplicationType.Web,
@@ -78,6 +83,7 @@ class FunctionStack : Stack
             ResourceGroupName = resourceGroup.Name,
         });
         
+        // pd01 Function App
         var app = new WebApp("FunctionApp", new WebAppArgs()
         {
             Kind = "FunctionApp",
@@ -135,14 +141,16 @@ class FunctionStack : Stack
 
         // Set outputs
         ResourceGroupName = resourceGroup.Name;
-        Endpoint = Output.Format($"https://{app.DefaultHostName}/api/lookup");
+        Endpoint = Output.Create("You forgot to fix me"); // Output.Format($"https://{app.DefaultHostName}/api/lookup");
     }
     
     [Output]
     public Output<string> ResourceGroupName { get; set; }
+    
     [Output]
     public Output<string> Endpoint { get; set; }
     
+    // Magic helpers (I copied these from Pulumi examples...)
     private static Output<string> SignedBlobReadUrl(Blob blob, BlobContainer container, StorageAccount account, ResourceGroup resourceGroup)
     {
         return Output.Tuple<string, string, string, string>(
