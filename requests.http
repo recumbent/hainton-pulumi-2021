@@ -1,10 +1,13 @@
-# Test calls to function
+# Variables
 
-@devUrl = https://functionapp3c31729b.azurewebsites.net/api/lookup
+@devUrl = https://example.com
 
 @prodUrl = https://example.com
 
 @awsUrl = https://example.com
+
+# Test calls to function
+
 # Quote Server
 
 GET https://0rogaeco5b.execute-api.eu-west-2.amazonaws.com/Prod/quote/dna/5
@@ -60,7 +63,7 @@ POST {{prodUrl}}
 
 # @name AWS
 
-POST {{awsUrl}}
+POST {{awsUrl}}/aws-dev/
 
 {
     "ClientId" : 3,
