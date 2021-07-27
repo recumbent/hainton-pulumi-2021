@@ -1,8 +1,8 @@
 # Variables
 
-@devUrl = https://example.com
+@devUrl = https://functionapp2c5dfe45.azurewebsites.net/api/lookup
 
-@prodUrl = https://example.com
+@prodUrl = https://functionapp960a0b0d.azurewebsites.net/api/lookup
 
 @awsUrl = https://example.com
 
